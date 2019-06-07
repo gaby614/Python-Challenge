@@ -9,36 +9,33 @@ mkdir = os.getcwd()
 filepath = os.path.join( mkdir,'Resources','budget_data.csv')
 
 #Initialize variables
-mcount = 0; total = 0; PreValue = 0; Diff = 0; DiffMax = 0; DiffMin = 0; rev_change = 0; rev_change_list = []; mo_of_change = []
-
+mcount = 0 
+total = 0 
+PreValue = 0 
+Diff = 0 
+DiffMax = 0
+DiffMin = 0 
+revenue_change_total = 0.00
+revenue_change_count = 0
 #Open and read CSV file
 with open(filepath, newline='') as csvfile:
      csvreader = csv.reader(csvfile, delimiter=',')
      csv_header = next(csvreader)
+     csv_row = next(csvreader)
+     PreValue = int(csv_row[1])
      print(f'Financial Analysis'+'\n')
      print(f'---------'+'\n')
+     print(csv_row[0], csv_row[1])
      for i in csvreader:
+      
          month = i[0]
          Amount = i[1]
          iAmount = int(Amount)
-         Diff =  iAmount - PreValue
+         Diff =  iAmount - PreValue  
+         revenue_change_total = revenue_change_total + Diff
+         revenue_change_count = revenue_change_count + 1
 
-   #       #changes of revenue calculations
-   #       rev_change = int(row["Revenue"]) - PreValue
-   #       PreValue = int(row["Revenue"])
-   #       mo_of_change = mo_of_change + [row["Date"]]
 
-   #       #print the outcomes
-   # output = (
-   #       f"Total Months: {Month}\n"
-   #       f"Total Revenue: {Amount}\n"
-   #       f"Average Revenue Change: ${revenue_avg}\n"
-   #       f"Greatest increase in Revenue: {greatestIncrease[0]} ${greatestIncrease[1]}\n"
-   #       f"Greatest decrease in Revenue: {greatestDecrease[0]} ${greatestDecrease[1]}\n"
-   #        )
-
-   # print(output)
-        
          #Greatest increase in profits (financial analysis)
          if DiffMax < Diff:
             DiffMax = Diff
@@ -53,16 +50,17 @@ with open(filepath, newline='') as csvfile:
          mcount = mcount + 1
          total += int(Amount) 
 
-         # #calculate average_change
-         # average_change = round(total/month, 2)
+average_change = revenue_change_total / (revenue_change_count-1)
 
-  
+print(revenue_change_count)
+
+
 #The total number of months included in the dataset
 print(f'Total Months : {mcount}')
 #The total net amount of "Profit/Losses" over the entire period
 print(f'Total: $ {total}')
-# #The average of changes in "Profit/Losses" over the entire period
-# print(f'Total: $ {total}')
+#The average of changes in "Profit/Losses" over the entire period
+print(f'average_change: $ {average_change}')
 # Greatest increase in profit
 print(f'Greatest Increase in Profits: {DiffMaxDate} : ($ {DiffMax})')
 # Greatest increase in profit
